@@ -1,4 +1,4 @@
-const OFFERTITLE = [
+const OFFER_TITLE = [
   'Квартира в спальном районе',
   'Доступная квартира в хорошем состоянии',
   'Не большая квартира для молодых людей',
@@ -11,7 +11,7 @@ const OFFERTITLE = [
   'Квартира возле парка'
 ];
 
-const OFFERDESCRIPTION = [
+const OFFER_DESCRIPTION = [
   'Хорошая квартира в старом доме на втором этаже',
   'В продаже имеется двухкомнатная квартира на первом этаже двухэтажного кирпичного дома.',
   'Высокие потолки. Два санузла. В квартире имеется подвал.',
@@ -24,7 +24,7 @@ const OFFERDESCRIPTION = [
   'Квартира в хорошем состоянии,чистая. Новая сантехника. Балкон застеклен.'
 ];
 
-const OFFERTYPE = [
+const OFFER_TYPE = [
   'palace',
   'flat',
   'house',
@@ -32,19 +32,19 @@ const OFFERTYPE = [
   'hotel'
 ];
 
-const OFFERCHECKIN = [
+const OFFER_CHECKIN = [
   '12:00',
   '13:00',
   '14:00'
 ];
 
-const OFFERCHECKOUT = [
+const OFFER_CHECKOUT = [
   '12:00',
   '13:00',
   '14:00'
 ];
 
-const OFFERFEATURES = [
+const OFFER_FEATURES = [
   'wifi',
   'dishwasher',
   'parking',
@@ -53,7 +53,7 @@ const OFFERFEATURES = [
   'conditioner'
 ];
 
-const OFFERPHOTOS = [
+const OFFER_PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
@@ -105,17 +105,17 @@ const createWizard = () => {
       'avatar': getAvatar(getRandomInt(1, 10)),
     },
     'offer': {
-      'title': getRandomArrayElement(OFFERTITLE),
+      'title': getRandomArrayElement(OFFER_TITLE),
       'address': `${lat, lng}`,
       'price': getRandomInt(100000,1000000),
-      'type': getRandomArrayElement(OFFERTYPE),
+      'type': getRandomArrayElement(OFFER_TYPE),
       'rooms': getRandomInt(1,6),
       'guests': getRandomInt(1,13),
-      'checkin': getRandomArrayElement(OFFERCHECKIN),
-      'checkout': getRandomArrayElement(OFFERCHECKOUT),
-      'description': getRandomArrayElement(OFFERDESCRIPTION),
-      'features': getRandomArrayElements(OFFERFEATURES, getRandomInt(1,6)),
-      'photos': getRandomArrayElements(OFFERPHOTOS, getRandomInt(1,3)),
+      'checkin': getRandomArrayElement(OFFER_CHECKIN),
+      'checkout': getRandomArrayElement(OFFER_CHECKOUT),
+      'description': getRandomArrayElement(OFFER_DESCRIPTION),
+      'features': getRandomArrayElements(OFFER_FEATURES, getRandomInt(1,6)),
+      'photos': getRandomArrayElements(OFFER_PHOTOS, getRandomInt(1,3)),
     },
     'location': {
       'lat': lat,
