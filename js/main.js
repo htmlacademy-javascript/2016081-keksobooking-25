@@ -1,3 +1,6 @@
 import {getDataOffers} from './data.js';
+import {createCard} from './card.js';
 
-console.log(getDataOffers()); // eslint-disable-line
+const dataOffers = getDataOffers();
+document.querySelector('#map-canvas').append(createCard(dataOffers[0]));
+
