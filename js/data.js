@@ -55,8 +55,6 @@ const OFFER_PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
 
-//const COUNT_OFFER = 10;
-
 const getRandomArrayElement = (elements) => elements[getRandomInt(0, elements.length - 1)];
 
 // выбор несколько не повторяющихся значений из массива
