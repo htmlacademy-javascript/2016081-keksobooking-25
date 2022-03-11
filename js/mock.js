@@ -1,4 +1,4 @@
-import {getRandomInt, getRandomFloat} from './util.js';
+import {getRandomInt, getRandomFloat} from './utils.js';
 
 const OFFER_TITLE = [
   'Квартира в спальном районе',
@@ -54,8 +54,6 @@ const OFFER_PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
-
-//const COUNT_OFFER = 10;
 
 const getRandomArrayElement = (elements) => elements[getRandomInt(0, elements.length - 1)];
 
