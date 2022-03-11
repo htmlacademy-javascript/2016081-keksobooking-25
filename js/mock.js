@@ -1,4 +1,4 @@
-import {getRandomInt, getRandomFloat} from './util.js';
+import {getRandomInt, getRandomFloat} from './utils.js';
 
 const OFFER_TITLE = [
   'Квартира в спальном районе',

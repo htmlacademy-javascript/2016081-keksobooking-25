@@ -1,4 +1,4 @@
-import {getDataOffers} from './data.js';
+import {getDataOffers} from './mock.js';
 import {createCard} from './card.js';
 
 const dataOffers = getDataOffers();
