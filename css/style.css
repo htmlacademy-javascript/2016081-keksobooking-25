@@ -1028,3 +1028,10 @@ fieldset {
 .hidden {
   display: none;
 }
+
+.form__error {
+  display: block;
+  color: red;
+  font-size: 0.85em;
+}
+
