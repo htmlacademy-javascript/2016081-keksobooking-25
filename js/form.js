@@ -1,3 +1,9 @@
+import {safeSetTimeout} from './utils.js';
+import {resetMap} from './map.js';
+import {runFilter} from './filter.js';
+import {sendData} from './server.js';
+import {showSuccess, showError} from './msg-modal.js';
+
 const adForm = document.querySelector('.ad-form');
 const fields = adForm.children;
 const filtersForm = document.querySelector('.map__filters');
@@ -27,13 +33,26 @@ const pristine = new Pristine(adForm, {
 }, false);
 
 const MAX_PRICE = 100000;
+const MIN_LENGTH_TITLE = 30;
+const MAX_LENGTH_TITLE = 100;
+const WIDTH_IMG = 70;
+const HEIGHT_IMG = 70;
+const DEFAULT_AVATAR = 'img/muffin-grey.svg';
 
+const avatarPreview = adForm.querySelector('.ad-form-header__preview img');
 const fieldPrice = adForm.querySelector('#price');
 const fieldType = adForm.querySelector('#type');
 const fieldRoom = adForm.querySelector('#room_number');
 const fieldCapacity = adForm.querySelector('#capacity');
 
 const elementSlider = adForm.querySelector('.ad-form__slider');
+
+
+const startFilter = () => {
+  setTimeout(runFilter, 1000);
+};
+
+filtersForm.addEventListener('change', safeSetTimeout(runFilter));
 
 
 const MinPriceForType = {
@@ -63,7 +82,7 @@ elementSlider.noUiSlider.on('update', () => {
 
 
 function validateTitle(value) {
-  return value.length >= 30 && value.length <= 100;
+  return value.length >= MIN_LENGTH_TITLE && value.length <= MAX_LENGTH_TITLE;
 }
 
 fieldType.addEventListener('change', (evt) => {
@@ -87,14 +106,14 @@ fieldPrice.addEventListener('change', (evt) => {
 });
 
 function validatePrice(value) {
-  return value >= getMinPrice() && value <= 100000;
+  return value >= getMinPrice() && value <= MAX_PRICE;
 }
 
-pristine.addValidator(adForm.querySelector('#title'), validateTitle, 'Длина поля от 30 до 100 символов');
-pristine.addValidator(fieldPrice, validatePrice, `Минимальная сумма ${getMinPrice()}, максимальная 100000`);
+pristine.addValidator(adForm.querySelector('#title'), validateTitle, `Длина поля от ${MIN_LENGTH_TITLE} до ${MAX_LENGTH_TITLE} символов`);
+pristine.addValidator(fieldPrice, validatePrice, `Минимальная сумма ${getMinPrice()}, максимальная ${MAX_PRICE}`);
 
 
-const optionCaoacity = {
+const OptionCaoacity = {
   1 : ['1',],
   2 : ['1','2'],
   3 : ['1','2','3'],
@@ -102,19 +121,108 @@ const optionCaoacity = {
 };
 
 function validateRoom() {
-  return optionCaoacity[fieldRoom.value].includes(fieldCapacity.value);
+  return OptionCaoacity[fieldRoom.value].includes(fieldCapacity.value);
 }
 
 pristine.addValidator(fieldRoom, validateRoom, `Количество комнат ${fieldRoom.value} не соответствует числу гостей ${fieldCapacity.value}`);
 pristine.addValidator(fieldCapacity, validateRoom, `Число гостей ${fieldCapacity.value} не соответствует количеству комнат ${fieldRoom.value}`);
 
 
+const fieldTimein = adForm.querySelector('#timein');
+const fieldTimeout = adForm.querySelector('#timeout');
+
+fieldTimein.addEventListener('change', (evt) => {
+  fieldTimeout.value = evt.target.value;
+});
+
+fieldTimeout.addEventListener('change', (evt) => {
+  fieldTimein.value = evt.target.value;
+});
+
+
+adForm.querySelector('#avatar').addEventListener('change', (evt) => {
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    avatarPreview.src = reader.result;
+  };
+
+  if (evt.target.files[0]) {
+    reader.readAsDataURL(evt.target.files[0]);
+  }
+});
+
+
+const elementPhoto = adForm.querySelector('.ad-form__photo');
+
+// загрузка фотографий жилья
+adForm.querySelector('#images').addEventListener('change', (evt) => {
+  adForm.querySelectorAll('.ad-form__photo').forEach((oldPhoto) => oldPhoto.remove());
+
+  for (let i = 0; i < evt.target.files.length; i++) {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const newPhoto = document.createElement('img');
+      newPhoto.src = reader.result;
+      newPhoto.width = WIDTH_IMG;
+      newPhoto.height = HEIGHT_IMG;
+      newPhoto.alt = `Фото жилья ${i}`;
+
+      const newElement = elementPhoto.cloneNode();
+      newElement.appendChild(newPhoto);
+      adForm.querySelector('.ad-form__photo-container').appendChild(newElement);
+    };
+
+    reader.readAsDataURL(evt.target.files[i]);
+  }
+});
+
+// очистка формы
+const resetForm = () => {
+  adForm.reset();
+  filtersForm.reset();
+  // удаляем загруженныне фото
+  avatarPreview.src = DEFAULT_AVATAR;
+  adForm.querySelectorAll('.ad-form__photo').forEach((oldPhoto) => oldPhoto.remove());
+  resetMap();
+  runFilter();
+};
+
+
+const btnSubmit = adForm.querySelector('.ad-form__photo');
+
+const blockSubmitButton = () => {
+  btnSubmit.disabled = true;
+  btnSubmit.textContent = 'Отправка...';
+};
+
+const unblockSubmitButton = () => {
+  btnSubmit.disabled = false;
+  btnSubmit.textContent = 'Опубликовать';
+};
+
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   pristine.validate();
+  blockSubmitButton();
+
+  sendData(() => {
+    showSuccess();
+    unblockSubmitButton();
+    resetForm();
+  }, () => {
+    showError();
+    unblockSubmitButton();
+  }, new FormData(evt.target));
 
 });
 
 
-export {toggleActivateForm};
+adForm.querySelector('.ad-form__reset').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetForm();
+});
+
+export {toggleActivateForm, startFilter};
 
