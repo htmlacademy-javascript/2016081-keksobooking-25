@@ -1,5 +1,5 @@
 import {createCard} from './card.js';
-import {toggleActivateForm} from './form.js';
+import {toggleActivateForm, startFilter} from './form.js';
 
 const fieldAddress = document.querySelector('#address');
 
@@ -15,6 +15,7 @@ const map = L.map('map-canvas')
   .on('load', () => {
     toggleActivateForm(true);
     fieldAddress.value = `${COORDINATES_TOKYO.lat}, ${COORDINATES_TOKYO.lng}`;
+    startFilter();
   });
 
 const loadMap = () => {

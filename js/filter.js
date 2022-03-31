@@ -4,6 +4,7 @@ import {showAlert} from './utils.js';
 
 const DEFAULT_VALUE = 'any';
 const COUNT_DATA = 10;
+const URL_DATA = 'https://25.javascript.pages.academy/keksobooking/data';
 
 const filtersForm = document.querySelector('.map__filters');
 
@@ -27,12 +28,33 @@ const checkPrice = (item) => price.value === DEFAULT_VALUE || (item.offer.price 
 const checkFeatures = (item) => Array.from(features.querySelectorAll('.map__checkbox:checked')).every((checkedFeatures) =>
   item.offer.features && item.offer.features.includes(checkedFeatures.value),);
 
+
+let dataCache = [];
+
 const runFilter = () => {
-  getData((data) => {
-    clearMarkers();
-    createMarkers(data.filter((item) => checkType(item) && checkRooms(item) && checkGuests(item) && checkPrice(item) && checkFeatures(item)).slice(0, COUNT_DATA));
+  const data = [];
+  clearMarkers();
+
+  for (let i = 0; i < dataCache.length; i++) {
+    if (checkType(dataCache[i]) && checkRooms(dataCache[i]) && checkGuests(dataCache[i]) && checkPrice(dataCache[i]) && checkFeatures(dataCache[i])) {
+      if (data.length === COUNT_DATA) {
+        break;
+      }
+      data.push(dataCache[i]);
+    }
+  }
+
+  createMarkers(data);
+};
+
+
+const loadOffersFromServer = () => {
+  getData(URL_DATA, (data) => {
+    dataCache = data;
+    setTimeout(runFilter, 500);
   }, showAlert);
 };
 
 
-export {runFilter};
+export {runFilter, loadOffersFromServer};
+

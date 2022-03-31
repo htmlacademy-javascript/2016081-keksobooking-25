@@ -1,7 +1,6 @@
 import {loadMap} from './map.js';
-import {toggleActivateForm, startFilter} from './form.js';
+import {toggleActivateForm} from './form.js';
 
 toggleActivateForm(false);
 loadMap();
-startFilter();
 
