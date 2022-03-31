@@ -1,6 +1,6 @@
-import {safeSetTimeout} from './utils.js';
+import {debounce} from './utils.js';
 import {resetMap} from './map.js';
-import {runFilter} from './filter.js';
+import {runFilter, loadOffersFromServer} from './filter.js';
 import {sendData} from './server.js';
 import {showSuccess, showError} from './msg-modal.js';
 
@@ -49,10 +49,10 @@ const elementSlider = adForm.querySelector('.ad-form__slider');
 
 
 const startFilter = () => {
-  setTimeout(runFilter, 1000);
+  loadOffersFromServer();
 };
 
-filtersForm.addEventListener('change', safeSetTimeout(runFilter));
+filtersForm.addEventListener('change', debounce(runFilter));
 
 
 const MinPriceForType = {
@@ -204,18 +204,19 @@ const unblockSubmitButton = () => {
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  pristine.validate();
-  blockSubmitButton();
+  if (pristine.validate()) {
+    blockSubmitButton();
 
-  sendData(() => {
-    showSuccess();
-    unblockSubmitButton();
-    resetForm();
-  }, () => {
-    showError();
-    unblockSubmitButton();
-  }, new FormData(evt.target));
+    sendData(() => {
+      showSuccess();
+      unblockSubmitButton();
+      resetForm();
+    }, () => {
+      showError();
+      unblockSubmitButton();
+    }, new FormData(evt.target));
 
+  }
 });
 
 

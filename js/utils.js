@@ -22,7 +22,7 @@ const getRandomFloat = (min, max, floor) => {
   return (lower + Math.random() * (upper - lower)).toFixed(floor);
 };
 
-const safeSetTimeout = (cb, timeDelay = 1000) => {
+const debounce = (cb, timeDelay = 500) => {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
@@ -54,5 +54,5 @@ const showAlert = (message) => {
 };
 
 
-export {isEsc, getRandomInt, getRandomFloat, safeSetTimeout, showAlert};
+export {isEsc, getRandomInt, getRandomFloat, debounce, showAlert};
 

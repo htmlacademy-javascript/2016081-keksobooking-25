@@ -4,6 +4,7 @@ import {showAlert} from './utils.js';
 
 const DEFAULT_VALUE = 'any';
 const COUNT_DATA = 10;
+const COUNT_CACHE = 20;
 
 const filtersForm = document.querySelector('.map__filters');
 
@@ -27,12 +28,30 @@ const checkPrice = (item) => price.value === DEFAULT_VALUE || (item.offer.price 
 const checkFeatures = (item) => Array.from(features.querySelectorAll('.map__checkbox:checked')).every((checkedFeatures) =>
   item.offer.features && item.offer.features.includes(checkedFeatures.value),);
 
+
+let dataCache = [];
+getData((data) => {
+  for (let i = 0; i < data.length && i < COUNT_CACHE; i++) {
+    dataCache.push(data[i]);
+  }
+}, showAlert);
+
+
 const runFilter = () => {
+  clearMarkers();
+  createMarkers(dataCache.filter((item) => checkType(item) && checkRooms(item) && checkGuests(item) && checkPrice(item) && checkFeatures(item)).slice(0, COUNT_DATA));
+};
+
+
+const loadOffersFromServer = () => {
+  dataCache = [];
   getData((data) => {
-    clearMarkers();
-    createMarkers(data.filter((item) => checkType(item) && checkRooms(item) && checkGuests(item) && checkPrice(item) && checkFeatures(item)).slice(0, COUNT_DATA));
+    for (let i = 0; i < data.length && i < COUNT_CACHE; i++) {
+      dataCache.push(data[i]);
+    }
+    setTimeout(runFilter, 500);
   }, showAlert);
 };
 
 
-export {runFilter};
+export {runFilter, loadOffersFromServer};
