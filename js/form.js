@@ -9,6 +9,7 @@ const fields = adForm.children;
 const filtersForm = document.querySelector('.map__filters');
 const filters = filtersForm.children;
 
+const URL_SERVER = 'https://25.javascript.pages.academy/keksobooking';
 
 const toggleActivateForm = (shouldActivate) => {
   adForm.classList[shouldActivate ? 'remove' : 'add']('ad-form--disabled');
@@ -207,14 +208,15 @@ adForm.addEventListener('submit', (evt) => {
   if (pristine.validate()) {
     blockSubmitButton();
 
-    sendData(() => {
+    sendData(URL_SERVER, () => {
       showSuccess();
       unblockSubmitButton();
       resetForm();
     }, () => {
       showError();
       unblockSubmitButton();
-    }, new FormData(evt.target));
+    },
+    new FormData(evt.target));
 
   }
 });
