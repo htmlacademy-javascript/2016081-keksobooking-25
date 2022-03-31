@@ -1,8 +1,5 @@
-const URL_DATA = 'https://25.javascript.pages.academy/keksobooking/data';
-const URL_SERVER = 'https://25.javascript.pages.academy/keksobooking';
-
-const getData = (onSuccess, onError) => {
-  fetch(URL_DATA)
+const getData = (url, onSuccess, onError) => {
+  fetch(url)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -13,9 +10,9 @@ const getData = (onSuccess, onError) => {
     .catch((err) => onError(`Ошибка загрузки ${err}`));
 };
 
-const sendData = (onSuccess, onError, body) => {
+const sendData = (url, onSuccess, onError, body) => {
   fetch(
-    URL_SERVER,
+    url,
     {
       method: 'POST',
       body,

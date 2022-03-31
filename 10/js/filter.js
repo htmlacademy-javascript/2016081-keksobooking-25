@@ -4,7 +4,7 @@ import {showAlert} from './utils.js';
 
 const DEFAULT_VALUE = 'any';
 const COUNT_DATA = 10;
-const COUNT_CACHE = 20;
+const URL_DATA = 'https://25.javascript.pages.academy/keksobooking/data';
 
 const filtersForm = document.querySelector('.map__filters');
 
@@ -30,28 +30,31 @@ const checkFeatures = (item) => Array.from(features.querySelectorAll('.map__chec
 
 
 let dataCache = [];
-getData((data) => {
-  for (let i = 0; i < data.length && i < COUNT_CACHE; i++) {
-    dataCache.push(data[i]);
-  }
-}, showAlert);
-
 
 const runFilter = () => {
+  const data = [];
   clearMarkers();
-  createMarkers(dataCache.filter((item) => checkType(item) && checkRooms(item) && checkGuests(item) && checkPrice(item) && checkFeatures(item)).slice(0, COUNT_DATA));
+
+  for (let i = 0; i < dataCache.length; i++) {
+    if (checkType(dataCache[i]) && checkRooms(dataCache[i]) && checkGuests(dataCache[i]) && checkPrice(dataCache[i]) && checkFeatures(dataCache[i])) {
+      if (data.length === COUNT_DATA) {
+        break;
+      }
+      data.push(dataCache[i]);
+    }
+  }
+
+  createMarkers(data);
 };
 
 
 const loadOffersFromServer = () => {
-  dataCache = [];
-  getData((data) => {
-    for (let i = 0; i < data.length && i < COUNT_CACHE; i++) {
-      dataCache.push(data[i]);
-    }
+  getData(URL_DATA, (data) => {
+    dataCache = data;
     setTimeout(runFilter, 500);
   }, showAlert);
 };
 
 
 export {runFilter, loadOffersFromServer};
+

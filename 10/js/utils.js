@@ -22,13 +22,13 @@ const getRandomFloat = (min, max, floor) => {
   return (lower + Math.random() * (upper - lower)).toFixed(floor);
 };
 
-const debounce = (cb, timeDelay = 500) => {
+function debounce(cb, timeDelay = 500) {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => cb.apply(this, rest), timeDelay);
   };
-};
+}
 
 const showAlert = (message) => {
   const SHOW_ALERT_TIME = 2000;
