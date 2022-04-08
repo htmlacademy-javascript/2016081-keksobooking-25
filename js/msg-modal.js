@@ -10,19 +10,19 @@ const showSuccess = () => {
   document.body.appendChild(success);
 
   // удаление сообщения и обработчик по нажатию Esc
-  const key = (evt) => {
+  const keydownEvent = (evt) => {
     if (isEsc(evt)) {
       evt.preventDefault();
       success.remove();
-      document.removeEventListener('keydown', key);
+      document.removeEventListener('keydown', keydownEvent);
     }
   };
   // добавить обработчик на всю страницу
-  document.addEventListener('keydown', key);
+  document.addEventListener('keydown', keydownEvent);
   // удаляем сообщение и обработчик
   success.addEventListener('click', () => {
     success.remove();
-    document.removeEventListener('keydown', key);
+    document.removeEventListener('keydown', keydownEvent);
   });
 };
 
@@ -31,24 +31,24 @@ const showError = () => {
   msgError.textContent = 'Ошибка загрузки данных';
   document.body.appendChild(error);
 
-  const key = (evt) => {
+  const keydownEvent = (evt) => {
     if (isEsc(evt)) {
       evt.preventDefault();
       error.remove();
-      document.removeEventListener('keydown', key);
+      document.removeEventListener('keydown', keydownEvent);
     }
   };
 
-  document.addEventListener('keydown', key);
+  document.addEventListener('keydown', keydownEvent);
 
   btnCloseError.addEventListener('click', () => {
     error.remove();
-    document.removeEventListener('keydown', key);
+    document.removeEventListener('keydown', keydownEvent);
   });
 
   error.addEventListener('click', () => {
     error.remove();
-    document.removeEventListener('keydown', key);
+    document.removeEventListener('keydown', keydownEvent);
   });
 };
 

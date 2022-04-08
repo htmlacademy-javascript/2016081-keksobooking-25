@@ -5,9 +5,9 @@ import {sendData} from './server.js';
 import {showSuccess, showError} from './msg-modal.js';
 
 const adForm = document.querySelector('.ad-form');
-const fields = adForm.children;
+const fieldsNode = adForm.children;
 const filtersForm = document.querySelector('.map__filters');
-const filters = filtersForm.children;
+const filtersNode = filtersForm.children;
 
 const URL_SERVER = 'https://25.javascript.pages.academy/keksobooking';
 
@@ -15,10 +15,10 @@ const toggleActivateForm = (shouldActivate) => {
   adForm.classList[shouldActivate ? 'remove' : 'add']('ad-form--disabled');
   filtersForm.classList[shouldActivate ? 'remove' : 'add']('map__filters--disabled');
 
-  for (const field of fields) {
+  for (const field of fieldsNode) {
     field[shouldActivate ? 'removeAttribute' : 'setAttribute']('disabled','disabled');
   }
-  for (const filter of filters) {
+  for (const filter of filtersNode) {
     filter[shouldActivate ? 'removeAttribute' : 'setAttribute']('disabled','disabled');
   }
 };
